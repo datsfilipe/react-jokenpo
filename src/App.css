@@ -1,0 +1,46 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+#root * {
+  margin-bottom: 1.5rem;
+}
+
+.container {
+  border: 1px solid rgba(255, 255, 255, 0.87);
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  width: 420px;
+  height: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-box {
+  width: 400px;
+  height: 400px;
+}
+
+span {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  text-shadow: 0 0 1px #fff;
+}
+
+select {
+  width: 100px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.87);
+  border-radius: 4px;
+  background-color: #1a1a1a;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: capitalize;
+}
