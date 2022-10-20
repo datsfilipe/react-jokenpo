@@ -4,6 +4,7 @@ It's a game of jokenpo made with ReactJS. It's a simple game, but it's a good wa
 
 ## Showcase
 
+https://user-images.githubusercontent.com/76636791/196980113-5f619a29-5413-4392-8e94-b7fbace5d4c5.mp4
 
 ## Description
 
