@@ -19,12 +19,15 @@ function App() {
   const checkVictory = () => {
     const options = { scissors, rocks, papers };
     const selected = options[guess];
-    const otherTwo = Object.entries(options).filter(([key]) => key !== guess);
-
-    if (selected.length === 0) {
+    const enemy = guess === 'scissors'
+      ? options.rocks : guess === 'rocks'
+      ? options.papers : options.scissors;
+    const other = Object.values(options).filter(option => option !== selected && option !== enemy);
+    
+    if (selected.length === 0 || enemy.length > 0 && other.length === 0) {
       alert("You lose!");
       setPlaying(false);
-    } else if (otherTwo.every(([key, value]) => value.length === 0)) {
+    } else if (enemy.length === 0) {
       alert("You win!");
       setPlaying(false);
     }
