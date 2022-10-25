@@ -16,6 +16,20 @@ function App() {
   const [rocks, setRocks] = useState<Option[]>([]);
   const [papers, setPapers] = useState<Option[]>([]);
 
+  const checkVictory = () => {
+    const options = { scissors, rocks, papers };
+    const selected = options[guess];
+    const otherTwo = Object.entries(options).filter(([key]) => key !== guess);
+
+    if (selected.length === 0) {
+      alert("You lose!");
+      setPlaying(false);
+    } else if (otherTwo.every(([key, value]) => value.length === 0)) {
+      alert("You win!");
+      setPlaying(false);
+    }
+  };
+
   const box = document.getElementById("game-box");
   const position = box?.getBoundingClientRect();
   const left = position?.left;
@@ -192,73 +206,7 @@ function App() {
         setPapers(newPapers);
       }
 
-      if (
-        playing &&
-        guess === "scissors" &&
-        scissors.length > 0 &&
-        rocks.length === 0
-      ) {
-        alert("You win!");
-        setPlaying(false);
-      } else if (playing && guess === "scissors" && scissors.length === 0) {
-        alert("You lose!");
-        setPlaying(false);
-      } else if (playing && guess === "scissors" && rocks.length === 0) {
-        alert("You win!");
-        setPlaying(false);
-      } else if (
-        playing &&
-        guess === "scissors" &&
-        papers.length === 0 &&
-        rocks.length > 0
-      ) {
-        alert("You lose!");
-        setPlaying(false);
-      } else if (
-        playing &&
-        guess === "rocks" &&
-        rocks.length > 0 &&
-        papers.length === 0
-      ) {
-        alert("You win!");
-        setPlaying(false);
-      } else if (playing && guess === "rocks" && rocks.length === 0) {
-        alert("You lose!");
-        setPlaying(false);
-      } else if (playing && guess === "rocks" && papers.length === 0) {
-        alert("You win!");
-        setPlaying(false);
-      } else if (
-        playing &&
-        guess === "rocks" &&
-        scissors.length === 0 &&
-        papers.length > 0
-      ) {
-        alert("You lose!");
-        setPlaying(false);
-      } else if (
-        playing &&
-        guess === "papers" &&
-        papers.length > 0 &&
-        scissors.length === 0
-      ) {
-        alert("You win!");
-        setPlaying(false);
-      } else if (playing && guess === "papers" && papers.length === 0) {
-        alert("You lose!");
-        setPlaying(false);
-      } else if (playing && guess === "papers" && scissors.length === 0) {
-        alert("You win!");
-        setPlaying(false);
-      } else if (
-        playing &&
-        guess === "papers" &&
-        rocks.length === 0 &&
-        scissors.length > 0
-      ) {
-        alert("You lose!");
-        setPlaying(false);
-      }
+      checkVictory();
     }, 250);
 
     return () => {
@@ -314,7 +262,11 @@ function App() {
           ))}
         </div>
       </div>
-      <BottomContent guess={guess} setGuess={setGuess} setPlaying={setPlaying} />
+      <BottomContent
+        guess={guess}
+        setGuess={setGuess}
+        setPlaying={setPlaying}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { BetOptions } from "./Options";
+import { BetOptions } from "./BetOptions";
 import { PlayButton } from "./PlayButton";
 import styles from "./BottomContent.module.css";
 
