@@ -1,0 +1,1 @@
+declare type GuessTypes = 'scissors' | 'rocks' | 'papers'

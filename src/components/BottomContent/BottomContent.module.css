@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container h1 {
+  font-size: 2rem;
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  width: 100%;
+}
+
+.inputContainer select {
+  border: none;
+  height: 100%;
+  width: 30%;
+  border-radius: 50px 0 0 50px;
+  text-align: center;
+  border: 1px solid transparent;
+  transition: border-color 0.25s;
+  cursor: pointer;
+}
+
+.inputContainer select, .inputContainer button {
+  margin: 0 2px;
+}
+
+.inputContainer select:hover {
+  border-color: #535bf2;
+}
+
+.inputContainer button {
+  height: 100%;
+  width: 30%;
+  border-radius: 0 50px 50px 0;
+}

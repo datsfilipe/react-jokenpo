@@ -1,261 +1,263 @@
-import { useState, useEffect, memo } from 'react'
-import './App.css'
+import { useState, useEffect, memo } from "react";
+import "./App.css";
+import { BottomContent } from "./components/BottomContent";
 
 type Option = {
   value: string;
   x: number;
   y: number;
   id: string;
-}
+};
 
 function App() {
-  const [guess, setGuess] = useState('scissors')
-  const [playing, setPlaying] = useState(false)
-  const [scissors, setScissors] = useState<Option[]>([])
-  const [rocks, setRocks] = useState<Option[]>([])
-  const [papers, setPapers] = useState<Option[]>([])
+  const [guess, setGuess] = useState<GuessTypes>("scissors");
+  const [playing, setPlaying] = useState(false);
+  const [scissors, setScissors] = useState<Option[]>([]);
+  const [rocks, setRocks] = useState<Option[]>([]);
+  const [papers, setPapers] = useState<Option[]>([]);
 
-  const box = document.getElementById('game-box')
-  const position = box?.getBoundingClientRect()
-  const left = position?.left
-  const top = position?.top
-  const right = position?.right
-  const bottom = position?.bottom
+  const checkVictory = () => {
+    const options = { scissors, rocks, papers };
+    const selected = options[guess];
+    const enemy = guess === 'scissors'
+      ? options.rocks : guess === 'rocks'
+      ? options.papers : options.scissors;
+    const other = Object.values(options).filter(option => option !== selected && option !== enemy);
+    
+    if (selected.length === 0 || enemy.length > 0 && other.length === 0) {
+      alert("You lose!");
+      setPlaying(false);
+    } else if (enemy.length === 0) {
+      alert("You win!");
+      setPlaying(false);
+    }
+  };
+
+  const box = document.getElementById("game-box");
+  const position = box?.getBoundingClientRect();
+  const left = position?.left;
+  const top = position?.top;
+  const right = position?.right;
+  const bottom = position?.bottom;
 
   useEffect(() => {
     if (left && top && right && bottom) {
       setScissors(() => {
-        let value = []
+        let value = [];
         for (let i = 0; i < 10; i++) {
           value.push({
-            value: '✂️',
+            value: "✂️",
             x: Math.floor(Math.random() * (right - left) + left),
             y: Math.floor(Math.random() * (bottom - top) + top),
-            id: i + 'scissor',
-          })
+            id: i + "scissor",
+          });
         }
-        return value
-      })
+        return value;
+      });
 
       setRocks(() => {
-        let value = []
+        let value = [];
         for (let i = 0; i < 10; i++) {
           value.push({
-            value: '🪨',
+            value: "🪨",
             x: Math.floor(Math.random() * (right - left) + left),
             y: Math.floor(Math.random() * (bottom - top) + top),
-            id: i + 'rock',
-          })
+            id: i + "rock",
+          });
         }
-        return value
-      })
+        return value;
+      });
 
       setPapers(() => {
-        let value = []
+        let value = [];
         for (let i = 0; i < 10; i++) {
           value.push({
-            value: '📄',
+            value: "📄",
             x: Math.floor(Math.random() * (right - left) + left),
             y: Math.floor(Math.random() * (bottom - top) + top),
-            id: i + 'paper',
-          })
+            id: i + "paper",
+          });
         }
-        return value
-      })
+        return value;
+      });
     }
-  }, [guess, left, top, right, bottom])
+  }, [guess, left, top, right, bottom]);
 
   const handleHit = (option: Option, optionList: Option[]) => {
     // return true or false for hit
-    const hit = optionList.some((item) => {
+    const hit = optionList.some(item => {
       return (
         option.x > item.x - 20 &&
         option.x < item.x + 20 &&
         option.y > item.y - 20 &&
         option.y < item.y + 20
-      )
-    })
+      );
+    });
 
-    return hit
-  }
+    return hit;
+  };
 
-  const handleTransferItem = (option: Option, optionList: Option[], optionList2: Option[], value: string) => {
-    const index = optionList.findIndex((item) => item.id === option.id)
-    const newList = [...optionList]
-    newList.splice(index, 1)
+  const handleTransferItem = (
+    option: Option,
+    optionList: Option[],
+    optionList2: Option[],
+    value: string
+  ) => {
+    const index = optionList.findIndex(item => item.id === option.id);
+    const newList = [...optionList];
+    newList.splice(index, 1);
     const newItem = {
       ...option,
       value,
-    }
-    optionList = newList
-    optionList2.push(newItem)
-    return [optionList, optionList2]
-  }
+    };
+    optionList = newList;
+    optionList2.push(newItem);
+    return [optionList, optionList2];
+  };
 
   useEffect(() => {
-    if (!playing) return
+    if (!playing) return;
     const timeout = setTimeout(() => {
       if (left && top && right && bottom) {
-        let newScissors = [...scissors]
-        let newRocks = [...rocks]
-        let newPapers = [...papers]
+        let newScissors = [...scissors];
+        let newRocks = [...rocks];
+        let newPapers = [...papers];
 
         newScissors.forEach(() => {
-          let value = newScissors.map((item) => {
-            const x = Math.round(Math.random() * 10 - 5 + item.x)
-            const y = Math.round(Math.random() * 10 - 5 + item.y)
+          let value = newScissors.map(item => {
+            const x = Math.round(Math.random() * 10 - 5 + item.x);
+            const y = Math.round(Math.random() * 10 - 5 + item.y);
             return {
               ...item,
               x: x > left && x < right ? x : item.x,
               y: y > top && y < bottom ? y : item.y,
-            }
-          })
+            };
+          });
 
-          value.forEach((item) => {
+          value.forEach(item => {
             if (handleHit(item, rocks)) {
-              const [newScissorsValue, newRocksValue] = handleTransferItem(item, value, newRocks, '🪨')
-              value = newScissorsValue
-              newRocks = newRocksValue
+              const [newScissorsValue, newRocksValue] = handleTransferItem(
+                item,
+                value,
+                newRocks,
+                "🪨"
+              );
+              value = newScissorsValue;
+              newRocks = newRocksValue;
             }
-          })
+          });
 
-          newScissors = value
-        })
+          newScissors = value;
+        });
 
         newRocks.forEach(() => {
-          let value = newRocks.map((item) => {
-            const x = Math.round(Math.random() * 10 - 5 + item.x)
-            const y = Math.round(Math.random() * 10 - 5 + item.y)
+          let value = newRocks.map(item => {
+            const x = Math.round(Math.random() * 10 - 5 + item.x);
+            const y = Math.round(Math.random() * 10 - 5 + item.y);
             return {
               ...item,
               x: x > left && x < right ? x : item.x,
               y: y > top && y < bottom ? y : item.y,
-            }
-          })
+            };
+          });
 
-          value.forEach((item) => {
+          value.forEach(item => {
             if (handleHit(item, papers)) {
-              const [newRocksValue, newPapersValue] = handleTransferItem(item, value, newPapers, '📄')
-              value = newRocksValue
-              newPapers = newPapersValue
+              const [newRocksValue, newPapersValue] = handleTransferItem(
+                item,
+                value,
+                newPapers,
+                "📄"
+              );
+              value = newRocksValue;
+              newPapers = newPapersValue;
             }
-          })
+          });
 
-          newRocks = value
-        })
+          newRocks = value;
+        });
 
         newPapers.forEach(() => {
-          let value = newPapers.map((item) => {
-            const x = Math.round(Math.random() * 10 - 5 + item.x)
-            const y = Math.round(Math.random() * 10 - 5 + item.y)
+          let value = newPapers.map(item => {
+            const x = Math.round(Math.random() * 10 - 5 + item.x);
+            const y = Math.round(Math.random() * 10 - 5 + item.y);
             return {
               ...item,
               x: x > left && x < right ? x : item.x,
               y: y > top && y < bottom ? y : item.y,
-            }
-          })
+            };
+          });
 
-          value.forEach((item) => {
+          value.forEach(item => {
             if (handleHit(item, scissors)) {
-              const [newPapersValue, newScissorsValue] = handleTransferItem(item, value, newScissors, '✂️')
-              value = newPapersValue
-              newScissors = newScissorsValue
+              const [newPapersValue, newScissorsValue] = handleTransferItem(
+                item,
+                value,
+                newScissors,
+                "✂️"
+              );
+              value = newPapersValue;
+              newScissors = newScissorsValue;
             }
-          })
+          });
 
-          newPapers = value
-        })
+          newPapers = value;
+        });
 
-        setScissors(newScissors)
-        setRocks(newRocks)
-        setPapers(newPapers)
+        setScissors(newScissors);
+        setRocks(newRocks);
+        setPapers(newPapers);
       }
 
-      if (playing && guess === 'scissors' && scissors.length > 0 && rocks.length === 0) {
-        alert('You win!')
-        setPlaying(false)
-      } else if (playing && guess === 'scissors' && scissors.length === 0) {
-        alert('You lose!')
-        setPlaying(false)
-      } else if (playing && guess === 'scissors' && rocks.length === 0) {
-        alert('You win!')
-        setPlaying(false)
-      } else if (playing && guess === 'scissors' && papers.length === 0 && rocks.length > 0) {
-        alert('You lose!')
-        setPlaying(false)
-      } else if (playing && guess === 'rocks' && rocks.length > 0 && papers.length === 0) {
-        alert('You win!')
-        setPlaying(false)
-      } else if (playing && guess === 'rocks' && rocks.length === 0) {
-        alert('You lose!')
-        setPlaying(false)
-      } else if (playing && guess === 'rocks' && papers.length === 0) {
-        alert('You win!')
-        setPlaying(false)
-      } else if (playing && guess === 'rocks' && scissors.length === 0 && papers.length > 0) {
-        alert('You lose!')
-        setPlaying(false)
-      } else if (playing && guess === 'papers' && papers.length > 0 && scissors.length === 0) {
-        alert('You win!')
-        setPlaying(false)
-      } else if (playing && guess === 'papers' && papers.length === 0) {
-        alert('You lose!')
-        setPlaying(false)
-      } else if (playing && guess === 'papers' && scissors.length === 0) {
-        alert('You win!')
-        setPlaying(false)
-      } else if (playing && guess === 'papers' && rocks.length === 0 && scissors.length > 0) {
-        alert('You lose!')
-        setPlaying(false)
-      }
-    }, 250)
+      checkVictory();
+    }, 250);
 
     return () => {
-      clearTimeout(timeout)
-    }
-  }, [playing, scissors, rocks, papers])
+      clearTimeout(timeout);
+    };
+  }, [playing, scissors, rocks, papers]);
 
   return (
-    <div className="App">
+    <div className='App'>
       <div className='container'>
         <div className='game-box' id='game-box'>
-          {scissors.map((scissor) => (
+          {scissors.map(scissor => (
             <div
               key={scissor.id}
               className='option'
               style={{
-                position: 'absolute',
+                position: "absolute",
                 left: scissor.x,
                 top: scissor.y,
-                transition: '0.25s all linear',
+                transition: "0.25s all linear",
               }}
             >
               {scissor.value}
             </div>
           ))}
-          {rocks.map((rock) => (
+          {rocks.map(rock => (
             <div
               key={rock.id}
               className='option'
               style={{
-                position: 'absolute',
+                position: "absolute",
                 left: rock.x,
                 top: rock.y,
-                transition: '0.25s all linear',
+                transition: "0.25s all linear",
               }}
             >
               {rock.value}
             </div>
           ))}
-          {papers.map((paper) => (
+          {papers.map(paper => (
             <div
               key={paper.id}
               className='option'
               style={{
-                position: 'absolute',
+                position: "absolute",
                 left: paper.x,
                 top: paper.y,
-                transition: '0.25s all linear',
+                transition: "0.25s all linear",
               }}
             >
               {paper.value}
@@ -263,20 +265,13 @@ function App() {
           ))}
         </div>
       </div>
-      <span>guess the winner</span>
-      <br />
-      <select value={guess} onChange={(e) => {
-        setGuess(e.target.value)
-        setPlaying(false)
-      }}>
-        <option value='scissors'>scissors</option>
-        <option value='rocks'>rocks</option>
-        <option value='papers'>papers</option>
-      </select>
-      <br />
-      <button onClick={() => setPlaying(true)}>Play</button>
+      <BottomContent
+        guess={guess}
+        setGuess={setGuess}
+        setPlaying={setPlaying}
+      />
     </div>
-  )
+  );
 }
 
-export default memo(App)
+export default memo(App);
