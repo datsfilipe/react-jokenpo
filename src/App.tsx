@@ -161,11 +161,7 @@ function App() {
           ))}
         </div>
       </div>
-      <BottomContent
-        guess={guess}
-        setGuess={setGuess}
-        setPlaying={setPlaying}
-      />
+      <BottomContent />
     </div>
   )
 }

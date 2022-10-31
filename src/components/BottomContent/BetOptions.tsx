@@ -1,17 +1,19 @@
-interface BetOptionsProps {
-  guess: GuessTypes;
-  setGuess: React.Dispatch<React.SetStateAction<GuessTypes>>;
-  setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { useContext } from 'react'
+import { GameContext } from '../../contexts/GameContext'
+export const BetOptions = () => {
+  const {
+    guess,
+    setGuess,
+    setPlaying
+  } = useContext(GameContext)
 
-export const BetOptions = (props: BetOptionsProps) => {
   return (
     <select
-      value={props.guess}
+      value={guess}
       onChange={e => {
         const newGuess = e.target.value as GuessTypes
-        props.setGuess(newGuess)
-        props.setPlaying(false)
+        setGuess(newGuess)
+        setPlaying(false)
       }}
     >
       <option value='scissors'>scissors</option>

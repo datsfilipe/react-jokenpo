@@ -1,7 +1,8 @@
-interface PlayButtonProps {
-  setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { useContext } from 'react'
+import { GameContext } from '../../contexts/GameContext'
 
-export const PlayButton = (props: PlayButtonProps) => {
-  return <button onClick={() => props.setPlaying(true)}>Play</button>
+export const PlayButton = () => {
+  const { setPlaying } = useContext(GameContext)
+
+  return <button onClick={() => setPlaying(true)}>Play</button>
 }
