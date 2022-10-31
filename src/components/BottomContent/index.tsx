@@ -1,6 +1,6 @@
-import { Title } from "./Title";
-import styles from "./BottomContent.module.css";
-import { SelectAndPlay } from "./SelectAndPlay";
+import { Title } from './Title'
+import styles from './BottomContent.module.css'
+import { SelectAndPlay } from './SelectAndPlay'
 
 interface BottomContentProps {
   guess: GuessTypes;
@@ -14,5 +14,5 @@ export const BottomContent = (props: BottomContentProps) => {
       <Title />
       <SelectAndPlay guess={props.guess} setGuess={props.setGuess} setPlaying={props.setPlaying} />
     </div>
-  );
-};
+  )
+}

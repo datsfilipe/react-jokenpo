@@ -3,5 +3,5 @@ interface PlayButtonProps {
 }
 
 export const PlayButton = (props: PlayButtonProps) => {
-  return <button onClick={() => props.setPlaying(true)}>Play</button>;
-};
+  return <button onClick={() => props.setPlaying(true)}>Play</button>
+}

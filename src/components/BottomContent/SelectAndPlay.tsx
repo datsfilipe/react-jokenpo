@@ -1,6 +1,6 @@
-import { BetOptions } from "./BetOptions";
-import { PlayButton } from "./PlayButton";
-import styles from "./BottomContent.module.css";
+import { BetOptions } from './BetOptions'
+import { PlayButton } from './PlayButton'
+import styles from './BottomContent.module.css'
 
 interface SelectAndPlayProps {
   guess: GuessTypes;
@@ -18,5 +18,5 @@ export const SelectAndPlay = (props: SelectAndPlayProps) => {
       />
       <PlayButton setPlaying={props.setPlaying} />
     </div>
-  );
-};
+  )
+}

@@ -10,13 +10,13 @@ export const BetOptions = (props: BetOptionsProps) => {
       value={props.guess}
       onChange={e => {
         const newGuess = e.target.value as GuessTypes
-        props.setGuess(newGuess);
-        props.setPlaying(false);
+        props.setGuess(newGuess)
+        props.setPlaying(false)
       }}
     >
       <option value='scissors'>scissors</option>
       <option value='rocks'>rocks</option>
       <option value='papers'>papers</option>
     </select>
-  );
-};
+  )
+}
