@@ -118,7 +118,7 @@ const initialState: OptionsState = {
 }
 
 export const GameProvider = ({ children }: ProviderProps) => {
-  const [guess, setGuess] = useState<GuessTypes>('scissors')
+  const [guess, setGuess] = useState<GuessTypes | ''>('')
   const [playing, setPlaying] = useState<boolean>(false)
   const [options, dispatch] = useReducer(reducer, initialState)
 

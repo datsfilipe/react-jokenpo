@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { GameContext } from '../../contexts/GameContext'
 
 export const PlayButton = () => {
-  const { setPlaying } = useContext(GameContext)
+  const { setPlaying, guess } = useContext(GameContext)
 
-  return <button onClick={() => setPlaying(true)}>Play</button>
+  return <button onClick={() => setPlaying(true)} disabled={!guess}>Play</button>
 }
