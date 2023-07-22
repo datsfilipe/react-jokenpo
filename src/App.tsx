@@ -1,26 +1,38 @@
 import { GameContext } from './contexts/GameContext'
 import { ActionType, handleHit } from './contexts/GameContext'
-import { memo, useEffect, useContext } from 'react'
+import { memo, useEffect, useContext, useState, useRef } from 'react'
 import { BottomContent } from './components/BottomContent'
 
 import './App.css'
 
 function App() {
-  const box = document.getElementById('game-box')
-  const position = box?.getBoundingClientRect()
-  const left = position?.left
-  const top = position?.top
-  const right = position?.right
-  const bottom = position?.bottom
+  const box = useRef<HTMLDivElement>(null)
+  const [measures, setMeasures] = useState<{
+    left: number
+    top: number
+    right: number
+    bottom: number
+  } | null>(null)
 
   const {
     guess,
-    setGuess,
     playing,
     setPlaying,
     options,
     dispatch
   } = useContext(GameContext)
+
+  useEffect(() => {
+    const position = box?.current?.getBoundingClientRect()
+    if (position && !measures) {
+      setMeasures({
+        left: position.left,
+        top: position.top,
+        right: position.right,
+        bottom: position.bottom
+      })
+    }
+  }, [])
 
   const checkVictory = () => {
     const { scissors, rocks, papers } = options
@@ -45,14 +57,14 @@ function App() {
     }
 
     const interval = setInterval(() => {
-      if (playing && left && top && right && bottom) {
+      if (playing && measures) {
         dispatch({
           type: ActionType.SET_OPTIONS,
           payload: options,
-          left,
-          top,
-          right,
-          bottom
+          left: measures.left,
+          top: measures.top,
+          right: measures.right,
+          bottom: measures.bottom
         })
       }
     }, 50)
@@ -61,23 +73,22 @@ function App() {
   }, [playing, options])
 
   useEffect(() => {
-    if (left && top && right && bottom) {
+    if (measures) {
       dispatch({
         type: ActionType.CREATE_OPTIONS,
-        left,
-        top,
-        right,
-        bottom
+        left: measures.left,
+        top: measures.top,
+        right: measures.right,
+        bottom: measures.bottom
       })
     }
   }, [playing, guess])
 
   useEffect(() => {
-    if (playing && left && top && right && bottom) {
+    if (playing && measures) {
       for(let i = 0; i < options.papers.length; i++) {
         const paper = options.papers[i]
         const hit = handleHit(paper, options.scissors)
-        console.log(hit)
         if (hit) {
           dispatch({
             type: ActionType.TRANSFER_OPTIONS,
@@ -116,7 +127,7 @@ function App() {
   return (
     <div className='App'>
       <div className='container'>
-        <div className='game-box' id='game-box'>
+        <div className='game-box' id='game-box' ref={box}>
           {options.scissors.map(scissor => (
             <div
               key={scissor.id}
