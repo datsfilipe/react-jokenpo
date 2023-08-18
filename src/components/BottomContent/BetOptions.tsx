@@ -8,18 +8,40 @@ export const BetOptions = () => {
   } = useContext(GameContext)
 
   return (
-    <select
-      value={guess}
-      onChange={e => {
-        const newGuess = e.target.value as GuessTypes
-        setGuess(e.target.value === 'Select an option' ? '' : newGuess)
-        setPlaying(false)
-      }}
-    >
-      <option defaultValue=''>Select an option</option>
-      <option value='scissors'>scissors</option>
-      <option value='rocks'>rocks</option>
-      <option value='papers'>papers</option>
-    </select>
+<div className="button-container">
+  <button
+    className="video-game-button"
+    onClick={() => {
+      const newGuess = 'scissors';
+      setGuess(newGuess);
+      setPlaying(false);
+    }}
+  >
+    scissors
+  </button>
+  
+  <button
+    className="video-game-button"
+    onClick={() => {
+      const newGuess = 'rocks';
+      setGuess(newGuess);
+      setPlaying(false);
+    }}
+  >
+    rocks
+  </button>
+  
+  <button
+    className="video-game-button"
+    onClick={() => {
+      const newGuess = 'papers';
+      setGuess(newGuess);
+      setPlaying(false);
+    }}
+  >
+    papers
+  </button>
+</div>
+
   )
 }

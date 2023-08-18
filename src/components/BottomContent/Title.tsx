@@ -1,3 +1,3 @@
 export const Title = () => {
-  return <h1>Guess The Winner</h1>
+  return <h1 className="title">Guess The Winner</h1>
 }
