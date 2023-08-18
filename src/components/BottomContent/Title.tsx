@@ -1,3 +1,12 @@
+import { GameContext } from '../../contexts/GameContext'
+import { useContext } from 'react'
+
 export const Title = () => {
-  return <h1 className="title">Guess The Winner</h1>
+  const {
+    guess
+  } = useContext(GameContext)
+
+  return <h1 className="title">
+    {guess ? '' : 'Guess The Winner'}
+  </h1>
 }

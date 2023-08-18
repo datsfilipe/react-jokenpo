@@ -15,8 +15,8 @@ declare type OptionsState = {
 }
 
 declare type Game = {
-  guess: GuessTypes | '';
-  setGuess: React.Dispatch<React.SetStateAction<GuessTypes | ''>>;
+  guess: GuessTypes | null;
+  setGuess: React.Dispatch<React.SetStateAction<GuessTypes | null>>;
   options: OptionsState;
   dispatch: React.Dispatch<Action>;
   playing: boolean;
