@@ -24,14 +24,29 @@ function App() {
   } = useContext(GameContext)
 
   useEffect(() => {
-    const position = box?.current?.getBoundingClientRect()
-    if (position && !measures) {
-      setMeasures({
-        left: position.left,
-        top: position.top,
-        right: position.right,
-        bottom: position.bottom
-      })
+    const updateMeasures = () => {
+      const position = box?.current?.getBoundingClientRect()
+      if (position) {
+        setMeasures({
+          left: position.left,
+          top: position.top,
+          right: position.right,
+          bottom: position.bottom,
+        })
+      }
+    }
+
+    updateMeasures()
+
+    const resizeObserver = new ResizeObserver(updateMeasures)
+    if (box.current) {
+      resizeObserver.observe(box.current)
+    }
+
+    return () => {
+      if (box.current) {
+        resizeObserver.unobserve(box.current)
+      }
     }
   }, [])
 
@@ -130,7 +145,7 @@ function App() {
   }, [options, playing])
 
   return (
-    <div className='App'>
+    <div>
       <div className='container'>
         <div className='game-box' id='game-box' ref={box}>
           {options.scissors.map(scissor => (

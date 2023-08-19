@@ -5,7 +5,6 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
   color: #D5FFD0;
   background-color: #090909;
 
@@ -20,7 +19,6 @@ body {
   margin: 0;
   display: flex;
   justify-content: center;
-  min-width: 320px;
   min-height: 100vh;
 }
 
