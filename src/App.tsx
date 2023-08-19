@@ -16,6 +16,7 @@ function App() {
 
   const {
     guess,
+    setGuess,
     playing,
     setPlaying,
     options,
@@ -23,18 +24,35 @@ function App() {
   } = useContext(GameContext)
 
   useEffect(() => {
-    const position = box?.current?.getBoundingClientRect()
-    if (position && !measures) {
-      setMeasures({
-        left: position.left,
-        top: position.top,
-        right: position.right,
-        bottom: position.bottom
-      })
+    const updateMeasures = () => {
+      const position = box?.current?.getBoundingClientRect()
+      if (position) {
+        setMeasures({
+          left: position.left,
+          top: position.top,
+          right: position.right,
+          bottom: position.bottom,
+        })
+      }
+    }
+
+    updateMeasures()
+
+    const resizeObserver = new ResizeObserver(updateMeasures)
+    if (box.current) {
+      resizeObserver.observe(box.current)
+    }
+
+    return () => {
+      if (box.current) {
+        resizeObserver.unobserve(box.current)
+      }
     }
   }, [])
 
   const checkVictory = () => {
+    if (guess === null) return
+
     const { scissors, rocks, papers } = options
     const selected = options[guess]
     const enemy = guess === 'scissors'
@@ -45,9 +63,11 @@ function App() {
     if (selected.length === 0 || enemy.length > 0 && other.length === 0) {
       alert('You lose!')
       setPlaying(false)
+      setGuess(null)
     } else if (enemy.length === 0) {
       alert('You win!')
       setPlaying(false)
+      setGuess(null)
     }
   }
 
@@ -125,7 +145,7 @@ function App() {
   }, [options, playing])
 
   return (
-    <div className='App'>
+    <div>
       <div className='container'>
         <div className='game-box' id='game-box' ref={box}>
           {options.scissors.map(scissor => (

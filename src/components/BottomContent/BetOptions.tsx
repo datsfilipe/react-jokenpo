@@ -1,47 +1,29 @@
 import { useContext } from 'react'
 import { GameContext } from '../../contexts/GameContext'
+import style from './BottomContent.module.css'
+
 export const BetOptions = () => {
   const {
-    guess,
     setGuess,
     setPlaying
   } = useContext(GameContext)
 
-  return (
-<div className="button-container">
-  <button
-    className="video-game-button"
-    onClick={() => {
-      const newGuess = 'scissors';
-      setGuess(newGuess);
-      setPlaying(false);
-    }}
-  >
-    scissors
-  </button>
-  
-  <button
-    className="video-game-button"
-    onClick={() => {
-      const newGuess = 'rocks';
-      setGuess(newGuess);
-      setPlaying(false);
-    }}
-  >
-    rocks
-  </button>
-  
-  <button
-    className="video-game-button"
-    onClick={() => {
-      const newGuess = 'papers';
-      setGuess(newGuess);
-      setPlaying(false);
-    }}
-  >
-    papers
-  </button>
-</div>
+  const options: GuessTypes[] = ['rocks', 'papers', 'scissors']
 
+  return (
+    <div className="button-container">
+      {options.map(option => (
+        <button
+          key={option}
+          className={style.controlBtn}
+          onClick={() => {
+            setGuess(option)
+            setPlaying(false)
+          }}
+        >
+          {option.charAt(0).toUpperCase() + option.slice(1)}
+        </button>
+      ))}
+    </div>
   )
 }

@@ -1,12 +1,18 @@
 import { BetOptions } from './BetOptions'
 import { PlayButton } from './PlayButton'
-import styles from './BottomContent.module.css'
+import { GameContext } from '../../contexts/GameContext'
+import { useContext } from 'react'
+
+import style from './BottomContent.module.css'
 
 export const SelectAndPlay = () => {
+  const {
+    guess
+  } = useContext(GameContext)
+
   return (
-    <div className={styles.inputContainer}>
-      <BetOptions />
-      <PlayButton />
+    <div className={style.inputContainer}>
+      {guess ? <PlayButton/> : <BetOptions />}
     </div>
   )
 }
