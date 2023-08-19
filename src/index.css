@@ -7,6 +7,7 @@
   color-scheme: light dark;
   color: #D5FFD0;
   background-color: #090909;
+  --border-primary: 4px solid #b18597;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -31,5 +32,6 @@ h1 {
   :root {
     color: #2A2A2A;
     background-color: #D5FFD0;
+    --border-primary: 4px solid #81917f;
   }
 }
