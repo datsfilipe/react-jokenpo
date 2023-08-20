@@ -20,7 +20,9 @@ function App() {
     playing,
     setPlaying,
     options,
-    dispatch
+    dispatch,
+    freezeTime,
+    moveSpeed
   } = useContext(GameContext)
 
   useEffect(() => {
@@ -57,14 +59,16 @@ function App() {
 
     const selected = options[guess]
     const enemy = options[enemyType]
-    const other = Object.values(options).filter(option => option !== selected && option !== enemy)
+    const other = Object.values(options).filter(option => option !== selected && option !== enemy)[0]
 
     if (selected.length === 0 || enemy.length > 0 && other.length === 0) return false
     else if (enemy.length === 0) return true
   }
 
   const showAlertAndReset = (message: string) => {
-    alert(message)
+    setTimeout(() => {
+      alert(message)
+    }, freezeTime)
     setPlaying(false)
     setGuess(null)
   }
@@ -95,20 +99,24 @@ function App() {
           bottom: measures.bottom
         })
       }
-    }, 50)
+    }, moveSpeed)
 
     return () => clearInterval(interval)
   }, [playing, options])
 
   useEffect(() => {
+    if (playing) return
+
     if (measures) {
-      dispatch({
-        type: ActionType.CREATE_OPTIONS,
-        left: measures.left,
-        top: measures.top,
-        right: measures.right,
-        bottom: measures.bottom
-      })
+      setTimeout(() => {
+        dispatch({
+          type: ActionType.CREATE_OPTIONS,
+          left: measures.left,
+          top: measures.top,
+          right: measures.right,
+          bottom: measures.bottom
+        })
+      }, freezeTime)
     }
   }, [playing, guess])
 
