@@ -21,4 +21,6 @@ declare type Game = {
   dispatch: React.Dispatch<Action>;
   playing: boolean;
   setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+  freezeTime: number;
+  moveSpeed: number;
 }

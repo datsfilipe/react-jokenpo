@@ -20,7 +20,9 @@ function App() {
     playing,
     setPlaying,
     options,
-    dispatch
+    dispatch,
+    freezeTime,
+    moveSpeed
   } = useContext(GameContext)
 
   useEffect(() => {
@@ -50,24 +52,34 @@ function App() {
     }
   }, [])
 
-  const checkVictory = () => {
+  const evaluateResult = (): true | false | undefined => {
     if (guess === null) return
 
-    const { scissors, rocks, papers } = options
+    const enemyType = guess === 'scissors' ? 'rocks' : guess === 'rocks' ? 'papers' : 'scissors'
+
     const selected = options[guess]
-    const enemy = guess === 'scissors'
-      ? rocks : guess === 'rocks'
-        ? papers : scissors
-    const other = Object.values(options).filter(option => option !== selected && option !== enemy)
-    
-    if (selected.length === 0 || enemy.length > 0 && other.length === 0) {
-      alert('You lose!')
-      setPlaying(false)
-      setGuess(null)
-    } else if (enemy.length === 0) {
-      alert('You win!')
-      setPlaying(false)
-      setGuess(null)
+    const enemy = options[enemyType]
+    const other = Object.values(options).filter(option => option !== selected && option !== enemy)[0]
+
+    if (selected.length === 0 || enemy.length > 0 && other.length === 0) return false
+    else if (enemy.length === 0) return true
+  }
+
+  const showAlertAndReset = (message: string) => {
+    setTimeout(() => {
+      alert(message)
+    }, freezeTime)
+    setPlaying(false)
+    setGuess(null)
+  }
+
+  const checkVictory = () => {
+    if (evaluateResult() === undefined) return
+
+    if (evaluateResult()) {
+      showAlertAndReset('You win!')
+    } else {
+      showAlertAndReset('You lose!')
     }
   }
 
@@ -87,20 +99,24 @@ function App() {
           bottom: measures.bottom
         })
       }
-    }, 50)
+    }, moveSpeed)
 
     return () => clearInterval(interval)
   }, [playing, options])
 
   useEffect(() => {
+    if (playing) return
+
     if (measures) {
-      dispatch({
-        type: ActionType.CREATE_OPTIONS,
-        left: measures.left,
-        top: measures.top,
-        right: measures.right,
-        bottom: measures.bottom
-      })
+      setTimeout(() => {
+        dispatch({
+          type: ActionType.CREATE_OPTIONS,
+          left: measures.left,
+          top: measures.top,
+          right: measures.right,
+          bottom: measures.bottom
+        })
+      }, freezeTime)
     }
   }, [playing, guess])
 
