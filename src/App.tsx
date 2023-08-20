@@ -50,24 +50,32 @@ function App() {
     }
   }, [])
 
-  const checkVictory = () => {
+  const evaluateResult = (): true | false | undefined => {
     if (guess === null) return
 
-    const { scissors, rocks, papers } = options
+    const enemyType = guess === 'scissors' ? 'rocks' : guess === 'rocks' ? 'papers' : 'scissors'
+
     const selected = options[guess]
-    const enemy = guess === 'scissors'
-      ? rocks : guess === 'rocks'
-        ? papers : scissors
+    const enemy = options[enemyType]
     const other = Object.values(options).filter(option => option !== selected && option !== enemy)
-    
-    if (selected.length === 0 || enemy.length > 0 && other.length === 0) {
-      alert('You lose!')
-      setPlaying(false)
-      setGuess(null)
-    } else if (enemy.length === 0) {
-      alert('You win!')
-      setPlaying(false)
-      setGuess(null)
+
+    if (selected.length === 0 || enemy.length > 0 && other.length === 0) return false
+    else if (enemy.length === 0) return true
+  }
+
+  const showAlertAndReset = (message: string) => {
+    alert(message)
+    setPlaying(false)
+    setGuess(null)
+  }
+
+  const checkVictory = () => {
+    if (evaluateResult() === undefined) return
+
+    if (evaluateResult()) {
+      showAlertAndReset('You win!')
+    } else {
+      showAlertAndReset('You lose!')
     }
   }
 
