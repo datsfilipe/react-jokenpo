@@ -4,6 +4,11 @@ declare type Option = {
   value: string;
   x: number;
   y: number;
+  velh: number;
+  velv: number;
+  acelh: number;
+  acelv: number;
+  mass: number;
   id: string;
 }
 

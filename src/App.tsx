@@ -122,8 +122,8 @@ function App() {
 
   useEffect(() => {
     if (playing && measures) {
-      for(let i = 0; i < options.papers.length; i++) {
-        const paper = options.papers[i]
+      for(const paper of options.papers) {
+        handleHit(paper, options.papers)
         const hit = handleHit(paper, options.scissors)
         if (hit) {
           dispatch({
@@ -134,8 +134,8 @@ function App() {
         }
       }
 
-      for(let i = 0; i < options.rocks.length; i++) {
-        const rock = options.rocks[i]
+      for(const rock of options.rocks) {
+        handleHit(rock, options.rocks)
         const hit = handleHit(rock, options.papers)
         if (hit) {
           dispatch({
@@ -146,8 +146,8 @@ function App() {
         }
       }
 
-      for(let i = 0; i < options.scissors.length; i++) {
-        const scissors = options.scissors[i]
+      for(const scissors of options.scissors) {
+        handleHit(scissors, options.scissors)
         const hit = handleHit(scissors, options.rocks)
         if (hit) {
           dispatch({
