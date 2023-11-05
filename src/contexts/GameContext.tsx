@@ -51,7 +51,6 @@ type Action =
         return true
       }
     }
-  
     return false;
   };
   
@@ -130,8 +129,6 @@ const reducer = (state: OptionsState, action: Action) => {
           option.acelh = 0
           option.acelv = 0
           allOptions.forEach(element => {
-            let fx = 0
-            let fy = 0
             let seno = 0
             let cose = 0
 
@@ -141,8 +138,6 @@ const reducer = (state: OptionsState, action: Action) => {
 
             if (d > 0) {
               const f = (mass * element.mass) / d
-              fx += (f * dx)
-              fy += (f * dy)
               seno = dy / d
               cose = dx / d
 
