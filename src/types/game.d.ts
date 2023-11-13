@@ -4,10 +4,10 @@ declare type Option = {
   value: string;
   x: number;
   y: number;
-  velh: number;
-  velv: number;
-  acelh: number;
-  acelv: number;
+  speedH: number;
+  speedV: number;
+  accelerationH: number;
+  accelerationV: number;
   mass: number;
   id: string;
 }

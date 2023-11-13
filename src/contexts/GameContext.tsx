@@ -29,23 +29,23 @@ type Action =
       const d = Math.sqrt(dx * dx + dy * dy);
       
       if (d < 20) {
-        const relativeVelX = item.velh - option.velh;
-        const relativeVelY = item.velv - option.velv;
+        const relativeSpeedX = item.speedH - option.speedH;
+        const relativeSpeedY = item.speedV - option.speedV;
   
         const normalX = dx / d;
         const normalY = dy / d;
   
-        const relativeVelocity = relativeVelX * normalX + relativeVelY * normalY;
+        const relativeSpeed = relativeSpeedX * normalX + relativeSpeedY * normalY;
   
-        if (relativeVelocity < 0) {
+        if (relativeSpeed < 0) {
           const elasticity = 0.9;
   
-          const impulse = (2 * relativeVelocity) / (1 / item.mass + 1 / option.mass);
+          const impulse = (2 * relativeSpeed) / (1 / item.mass + 1 / option.mass);
   
-          item.velh -= impulse * normalX / item.mass * elasticity;
-          item.velv -= impulse * normalY / item.mass * elasticity;
-          option.velh += impulse * normalX / option.mass * elasticity;
-          option.velv += impulse * normalY / option.mass * elasticity;
+          item.speedH -= impulse * normalX / item.mass * elasticity;
+          item.speedV -= impulse * normalY / item.mass * elasticity;
+          option.speedH += impulse * normalX / option.mass * elasticity;
+          option.speedV += impulse * normalY / option.mass * elasticity;
         }
         
         return true
@@ -73,13 +73,13 @@ const reducer = (state: OptionsState, action: Action) => {
           const x = Math.floor(Math.random() * (right - left)) + left
           const y = Math.floor(Math.random() * (bottom - top)) + top
           const id = `${option}-${i}`
-          const acelv = 0
-          const acelh = 0
-          const velh = 0
-          const velv = 0
-          const mass = Math.random() * 10
+          const accelerationV = 0
+          const accelerationH = 0
+          const speedH = 0
+          const speedV = 0
           const value = option === 'scissors' ? '✂️' : option === 'rocks' ? '🪨' : '📄'
-          const optionObj = { value, x, y, id, acelh, acelv, velh, velv, mass }
+          const mass = new Blob([value]).size
+          const optionObj = { value, x, y, id, accelerationH, accelerationV, speedH, speedV, mass }
 
           if (option === 'scissors') {
             optionsState.scissors.push(optionObj)
@@ -124,10 +124,10 @@ const reducer = (state: OptionsState, action: Action) => {
       Object.keys(payload).forEach(key => {
         const optionList = payload[key]
         const newOptionList = optionList.map(option => {
-          const { x, y, velh, velv, mass } = option
+          const { x, y, speedH, speedV, mass } = option
 
-          option.acelh = 0
-          option.acelv = 0
+          option.accelerationH = 0
+          option.accelerationV = 0
           allOptions.forEach(element => {
             let seno = 0
             let cose = 0
@@ -142,30 +142,30 @@ const reducer = (state: OptionsState, action: Action) => {
               cose = dx / d
 
               let acel = f / mass;
-              option.acelh = acel * cose;
-              option.acelv = acel * seno;
+              option.accelerationH = acel * cose;
+              option.accelerationV = acel * seno;
 
             }
           });
           
-          let newVelh = velh + option.acelh
-          let newVelv = velv + option.acelv
-          let newX = x + newVelh
-          let newY = y + newVelv
+          let newspeedH = speedH + option.accelerationH
+          let newspSpeedV = speedV + option.accelerationV
+          let newX = x + newspeedH
+          let newY = y + newspSpeedV
 
           if (!(newX > left && newX < right)) {
             newX = option.x
-            newVelh *= -1
+            newspeedH *= -1
           }
 
           if (!(newY > top && newY < bottom)) {
             newY = option.y
-            newVelv *= -1
+            newspSpeedV *= -1
           }
           return {
             ...option,
-            velv: newVelv,
-            velh: newVelh,
+            speedV: newspSpeedV,
+            speedH: newspeedH,
             x: newX,
             y: newY
           }
