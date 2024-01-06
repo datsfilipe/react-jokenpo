@@ -1,4 +1,6 @@
+@import './theme';
+
 html, body {
-  background-color: black;
-  color: white;
+  background-color: $black-100;
+  color: $white-50;
 }
